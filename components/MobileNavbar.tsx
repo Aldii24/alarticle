@@ -13,8 +13,9 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { useState } from "react";
 
-const MobileNavbar = () => {
+const MobileNavbar = ({ admin }: { admin: boolean }) => {
   const [open, setOpen] = useState(false);
+  const ADMIN = admin;
 
   return (
     <div className="md:hidden flex items-center gap-4 z-50">
@@ -48,12 +49,14 @@ const MobileNavbar = () => {
             </SheetTitle>
           </SheetHeader>
           <div className="flex flex-col gap-4 px-4">
-            <Button
-              asChild
-              className="border bg-transparent text-white hover:bg-transparent"
-            >
-              <Link href="/dashboard">Dashboard</Link>
-            </Button>
+            {ADMIN && (
+              <Button
+                asChild
+                className="border bg-transparent text-white hover:bg-transparent"
+              >
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+            )}
           </div>
         </SheetContent>
       </Sheet>

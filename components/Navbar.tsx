@@ -1,35 +1,46 @@
 import { Activity } from "lucide-react";
-import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { SignedIn, SignedOut, SignUpButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import MobileNavbar from "./MobileNavbar";
+import { currentUser } from "@clerk/nextjs/server";
+import { getUserRoleAdmin, syncUser } from "@/actions/user.action";
 
-const Navbar = () => {
+const Navbar = async () => {
+  const user = await currentUser();
+  const ADMIN = await getUserRoleAdmin();
+
+  if (user) await syncUser();
+
   return (
     <nav className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
       <div className="flex h-16 items-center justify-between md:px-16 px-4 py-4 gap-4">
         <div className="flex items-center">
-          <h2 className="text-3xl font-semibold bg-gradient-to-r from-blue-950 to-indigo-500 bg-clip-text text-transparent">
+          <Link
+            href="/"
+            className="text-3xl font-semibold bg-gradient-to-r from-blue-950 to-indigo-500 bg-clip-text text-transparent"
+          >
             Alarticle
-          </h2>
+          </Link>
           <Activity />
         </div>
 
         {/* DESKTOP NAVBAR */}
         <div className="items-center gap-4 hidden md:flex">
-          <Button
-            asChild
-            className="border bg-transparent text-white hover:bg-transparent"
-          >
-            <Link href="/dashboard">Dashboard</Link>
-          </Button>
+          {ADMIN && (
+            <Button
+              asChild
+              className="border bg-transparent text-white hover:bg-transparent"
+            >
+              <Link href="/dashboard">Dashboard</Link>
+            </Button>
+          )}
           <SignedOut>
             <Button
               asChild
               className="cursor-pointer border bg-transparent text-white hover:bg-transparent"
             >
-              <SignUpButton mode="modal">Login</SignUpButton>
+              <SignInButton mode="modal">Login</SignInButton>
             </Button>
           </SignedOut>
           <SignedIn>
@@ -37,7 +48,7 @@ const Navbar = () => {
           </SignedIn>
         </div>
 
-        <MobileNavbar />
+        <MobileNavbar admin={ADMIN ? true : false} />
       </div>
     </nav>
   );

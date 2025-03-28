@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  clerkId   String    @unique
+  username  String
+  email     String    @unique
+  role      ROLEUSER  @default(USER)
+  createdAt DateTime  @default(now())
+  articles  Article[]
+  comments  Comment[]
+  likes     Like[]
+
+  @@unique([id, clerkId])
+}
+
+model Article {
+  id              String    @id @default(cuid())
+  title           String
+  content         String
+  views           Int       @default(0)
+  readTime        String
+  categoryArticle String
+  imageUrl        String
+  authorId        String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  author          User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments        Comment[]
+  likes           Like[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  authorId  String
+  articleId String
+  createdAt DateTime @default(now())
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([authorId, articleId])
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  articleId String?
+  createdAt DateTime @default(now())
+  article   Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, articleId])
+  @@index([userId, articleId])
+}
+
+enum ROLEUSER {
+  USER
+  ADMIN
+}

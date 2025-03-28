@@ -3,6 +3,7 @@ import { Host_Grotesk as HG } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/sonner";
 
 const hostGrotesk = HG({
   variable: "--font-host-grotesk",
@@ -26,8 +27,9 @@ export default function RootLayout({
           className={`${hostGrotesk.variable} font-host-grotesk antialiased pattern`}
         >
           <Navbar />
-
           {children}
+
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

@@ -4,7 +4,7 @@ import WhoIsSection from "@/components/WhoIsSection";
 
 const HomePage = () => {
   return (
-    <main>
+    <main className="min-h-screen overflow-y-auto">
       {/* SEARCH SECTION */}
       <Search />
 
