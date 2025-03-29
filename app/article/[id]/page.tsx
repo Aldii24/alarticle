@@ -1,8 +1,8 @@
 import { getArticle } from "@/actions/article.action";
 import ArticleDetail from "@/components/ArticleDetail";
 
-const ArticlePage = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const id = (await params).id;
+const ArticlePage = async ({ params }: { params: { id: string } }) => {
+  const id = params.id;
 
   const article = await getArticle(id);
 

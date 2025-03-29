@@ -26,14 +26,14 @@ const ArticleList = () => {
       setThreeArticle(three);
     };
     fetchData();
-  }, [oneArticle, threeArticle]);
+  }, []);
 
   return (
     <div className="pt-10">
       <div className="flex md:flex-row flex-col w-full gap-6">
         <div className="md:w-1/2 w-full">
           {oneArticle ? (
-            <Link href={`/article/${oneArticle?.id}`}>
+            <Link href={`/article/${oneArticle?.id}`} prefetch={false}>
               <Card className="bg-background">
                 <CardHeader>
                   <Image
@@ -90,7 +90,11 @@ const ArticleList = () => {
             </div>
           ) : (
             threeArticle?.map((article) => (
-              <Link href={`/article/${article?.id}`} key={article?.id}>
+              <Link
+                href={`/article/${article?.id}`}
+                key={article?.id}
+                prefetch={false}
+              >
                 <div className="flex flex-col gap-4">
                   <Card className="bg-background">
                     <CardContent>
