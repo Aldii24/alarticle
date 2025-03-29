@@ -5,6 +5,7 @@ import { Separator } from "./ui/separator";
 const SeeAllArticleList = ({ article }: { article: any }) => {
   return (
     <>
+    
       <Link href={`/article/${article?.id}`} className="flex flex-col">
         <Image
           src={article?.imageUrl}

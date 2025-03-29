@@ -42,6 +42,7 @@ export const getArticle = async (id: string) => {
     return article;
   } catch (error) {
     console.log(error);
+    return [];
   }
 };
 

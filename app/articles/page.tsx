@@ -2,6 +2,7 @@
 
 import { getArticles } from "@/actions/article.action";
 import SeeAllArticleList from "@/components/SeeAllArticleList";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
 
 type AllArticles = Awaited<ReturnType<typeof getArticles>>;
@@ -26,9 +27,38 @@ const ArticlesPage = () => {
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {articles?.map((article) => (
-            <SeeAllArticleList key={article.id} article={article} />
-          ))}
+          {articles?.length === 0 ? (
+            <>
+              <div className="flex flex-col gap-4">
+                <Skeleton className="w-full h-[220px] rounded-lg" />
+                <Skeleton className="w-full h-[40px]" />
+                <div className="flex items-center justify-between">
+                  <Skeleton className="w-[70px] h-[15px] rounded-lg" />
+                  <Skeleton className="w-[90px] h-[25px] rounded-full" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-4">
+                <Skeleton className="w-full h-[220px] rounded-lg" />
+                <Skeleton className="w-full h-[40px]" />
+                <div className="flex items-center justify-between">
+                  <Skeleton className="w-[70px] h-[15px] rounded-lg" />
+                  <Skeleton className="w-[90px] h-[25px] rounded-full" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-4">
+                <Skeleton className="w-full h-[220px] rounded-lg" />
+                <Skeleton className="w-full h-[40px]" />
+                <div className="flex items-center justify-between">
+                  <Skeleton className="w-[70px] h-[15px] rounded-lg" />
+                  <Skeleton className="w-[90px] h-[25px] rounded-full" />
+                </div>
+              </div>
+            </>
+          ) : (
+            articles?.map((article) => (
+              <SeeAllArticleList key={article?.id} article={article} />
+            ))
+          )}
         </div>
       </div>
     </div>
