@@ -38,6 +38,10 @@ const ArticleDetail = ({ article }: { article: any }) => {
         dangerouslySetInnerHTML={{ __html: content }}
         className="markdown mt-10 text-muted-foreground"
       />
+
+      <p className="text-right text-sm text-muted-foreground mt-10 border-t pt-2">
+       Author: {article?.author?.username}
+      </p>
     </div>
   );
 };

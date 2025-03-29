@@ -59,8 +59,9 @@ export const getUserRoleAdmin = async () => {
 
     if (!userId || !user) return null;
 
-    const adminRole = await prisma.user.findFirst({
+    const adminRole = await prisma.user.findUnique({
       where: {
+        clerkId: userId,
         role: "ADMIN",
       },
     });

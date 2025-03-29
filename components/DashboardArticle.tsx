@@ -23,14 +23,14 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import dayjs from "dayjs";
-import { Edit, Trash2Icon } from "lucide-react";
+import { Edit, Loader, Loader2, Trash2Icon } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import MDEditor from "@uiw/react-md-editor";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const DashboardArticle = ({ articles }: { articles: any }) => {
   const [open, setOpen] = useState(false);
@@ -58,6 +58,13 @@ const DashboardArticle = ({ articles }: { articles: any }) => {
       setOpen(false);
     }
   };
+
+  useEffect(() => {
+    document.body.style.overflow = "auto";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   const deleteArticleById = async (id: string) => {
     try {
@@ -87,9 +94,7 @@ const DashboardArticle = ({ articles }: { articles: any }) => {
         <TableBody>
           {articles.map((article: any) => (
             <TableRow key={article.id}>
-              <TableCell className="max-w-[200px]">
-                {article.title.slice(0, 30) + "..."}
-              </TableCell>
+              <TableCell>{article.title.slice(0, 30) + "..."}</TableCell>
               <TableCell>{article.categoryArticle}</TableCell>
               <TableCell>{article.readTime} Min</TableCell>
               <TableCell>
@@ -219,9 +224,13 @@ const DashboardArticle = ({ articles }: { articles: any }) => {
                         <Button
                           type="submit"
                           disabled={isLoading}
-                          className="cursor-pointer rounded-full text-muted-foreground md:p-6 p-4 bg-gradient-to-r from-blue-950 to-indigo-500"
+                          className="cursor-pointer rounded-full text-white md:p-6 p-4 bg-gradient-to-r from-blue-950 to-indigo-500"
                         >
-                          {isLoading ? "Updating..." : "Update"}
+                          {isLoading ? (
+                            <Loader2 className="animate-spin" />
+                          ) : (
+                            "Update"
+                          )}
                         </Button>
                       </form>
                     )}

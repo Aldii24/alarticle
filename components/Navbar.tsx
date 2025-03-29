@@ -1,16 +1,34 @@
+"use client";
+
 import { Activity } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
 import MobileNavbar from "./MobileNavbar";
-import { currentUser } from "@clerk/nextjs/server";
+import { useEffect, useState } from "react";
 import { getUserRoleAdmin, syncUser } from "@/actions/user.action";
 
-const Navbar = async () => {
-  const user = await currentUser();
-  const ADMIN = await getUserRoleAdmin();
+const Navbar = () => {
+  const { user, isLoaded } = useUser();
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  if (user) await syncUser();
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        await syncUser();
+        const adminRole = await getUserRoleAdmin();
+        setIsAdmin(adminRole !== null);
+      }
+    };
+
+    fetchData();
+  }, [user]);
 
   return (
     <nav className="sticky top-0 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-50">
@@ -27,7 +45,7 @@ const Navbar = async () => {
 
         {/* DESKTOP NAVBAR */}
         <div className="items-center gap-4 hidden md:flex">
-          {ADMIN && (
+          {isAdmin && (
             <Button
               asChild
               className="border bg-transparent text-white hover:bg-transparent"
@@ -48,7 +66,7 @@ const Navbar = async () => {
           </SignedIn>
         </div>
 
-        <MobileNavbar admin={ADMIN ? true : false} />
+        <MobileNavbar admin={isAdmin} />
       </div>
     </nav>
   );

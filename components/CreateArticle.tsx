@@ -11,10 +11,10 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import MDEditor from "@uiw/react-md-editor";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { createArticle } from "@/actions/article.action";
-import { Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 
 const CreateArticle = () => {
   const [open, setOpen] = useState(false);
@@ -37,6 +37,13 @@ const CreateArticle = () => {
       setContent("");
     }
   };
+
+  useEffect(() => {
+    document.body.style.overflow = "auto";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -139,9 +146,9 @@ const CreateArticle = () => {
           <Button
             type="submit"
             disabled={isLoading}
-            className="cursor-pointer rounded-full text-muted-foreground md:p-6 p-4 bg-gradient-to-r from-blue-950 to-indigo-500"
+            className="cursor-pointer rounded-full text-white md:p-6 p-4 bg-gradient-to-r from-blue-950 to-indigo-500"
           >
-            {isLoading ? "Creating..." : "Create"}
+            {isLoading ? <Loader2 className="animate-spin" /> : "Create"}
           </Button>
         </form>
       </DialogContent>
