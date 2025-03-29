@@ -1,8 +1,22 @@
+"use client";
+
 import { getArticles } from "@/actions/article.action";
 import SeeAllArticleList from "@/components/SeeAllArticleList";
+import { useEffect, useState } from "react";
 
-const ArticlesPage = async () => {
-  const articles = await getArticles();
+type AllArticles = Awaited<ReturnType<typeof getArticles>>;
+
+const ArticlesPage = () => {
+  const [articles, setArticles] = useState<AllArticles>([]);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      const data = await getArticles();
+      setArticles(data);
+    };
+
+    fetchArticles();
+  }, [articles]);
 
   return (
     <div className="md:px-16 px-4 py-10">
