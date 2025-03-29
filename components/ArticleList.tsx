@@ -1,3 +1,5 @@
+"use client";
+
 import {
   getOneLatestArticle,
   getThreeLatestArticles,
@@ -6,20 +8,34 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-const ArticleList = async () => {
-  const article = await getOneLatestArticle();
-  const threeArticle = await getThreeLatestArticles();
+type OneArticle = Awaited<ReturnType<typeof getOneLatestArticle>>;
+type ThreeArticles = Awaited<ReturnType<typeof getThreeLatestArticles>>;
+
+const ArticleList = () => {
+  const [oneArticle, setOneArticle] = useState<OneArticle>();
+  const [threeArticle, setThreeArticle] = useState<ThreeArticles>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const one = await getOneLatestArticle();
+      const three = await getThreeLatestArticles();
+      setOneArticle(one);
+      setThreeArticle(three);
+    };
+    fetchData();
+  }, [oneArticle, threeArticle]);
 
   return (
     <div className="pt-10">
       <div className="flex md:flex-row flex-col w-full gap-6">
         <div className="md:w-1/2 w-full">
-          <Link href={`/article/${article?.id}`}>
+          <Link href={`/article/${oneArticle?.id}`}>
             <Card className="bg-background">
               <CardHeader>
                 <Image
-                  src={article?.imageUrl.trimStart() || ""}
+                  src={oneArticle?.imageUrl ?? 'https://via.placeholder.com/150'}
                   alt="image"
                   width={400}
                   height={200}
@@ -29,19 +45,19 @@ const ArticleList = async () => {
               <CardContent>
                 <div className="flex items-center justify-between">
                   <p className="text-xs bg-muted-foreground px-4 py-1 rounded-full text-background">
-                    {article?.categoryArticle}
+                    {oneArticle?.categoryArticle}
                   </p>
                   <span className="text-xs text-muted-foreground">
-                    {dayjs(article?.createdAt).format("MMM DD, YYYY")}
+                    {dayjs(oneArticle?.createdAt).format("MMM DD, YYYY")}
                   </span>
                 </div>
 
                 <div className="flex flex-col gap-2 pt-8">
                   <h3 className="text-lg font-semibold text-gray-500">
-                    {article?.title}
+                    {oneArticle?.title}
                   </h3>
                   <p className="text-xs text-muted-foreground line-clamp-2">
-                    {article?.content}
+                    {oneArticle?.content}
                   </p>
                 </div>
               </CardContent>

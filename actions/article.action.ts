@@ -22,7 +22,6 @@ export const createArticle = async (data: any) => {
     });
 
     revalidatePath("/dashboard");
-    revalidatePath("/");
     return { success: true, data: article };
   } catch (error) {
     return { success: false, error };
