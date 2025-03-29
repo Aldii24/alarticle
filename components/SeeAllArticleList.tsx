@@ -5,8 +5,11 @@ import { Separator } from "./ui/separator";
 const SeeAllArticleList = ({ article }: { article: any }) => {
   return (
     <>
-    
-      <Link href={`/article/${article?.id}`} className="flex flex-col">
+      <Link
+        href={`/article/${article?.id}`}
+        className="flex flex-col"
+        prefetch={false}
+      >
         <Image
           src={article?.imageUrl}
           alt={article?.title}

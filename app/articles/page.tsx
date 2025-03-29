@@ -17,7 +17,7 @@ const ArticlesPage = () => {
     };
 
     fetchArticles();
-  }, [articles]);
+  }, []);
 
   return (
     <div className="md:px-16 px-4 py-10">
