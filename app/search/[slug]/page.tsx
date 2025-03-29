@@ -2,8 +2,12 @@ import { getArticleBySearh } from "@/actions/article.action";
 import SearchListArticle from "@/components/SearchListArticle";
 import Image from "next/image";
 
-const SearchPage = async ({ params }: { params: { slug: string } }) => {
-  const slug = params.slug;
+const SearchPage = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
+  const slug = (await params).slug;
 
   const decodedSlug = decodeURIComponent(slug);
 
