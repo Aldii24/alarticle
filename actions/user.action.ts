@@ -24,6 +24,7 @@ export const syncUser = async () => {
         email: user?.emailAddresses[0].emailAddress,
         username:
           user?.username ?? user?.emailAddresses[0].emailAddress.split("@")[0],
+        image: user?.imageUrl,
       },
     });
 
@@ -38,7 +39,7 @@ export const getDBUserId = async () => {
   try {
     const { userId } = await auth();
 
-    if (!userId) throw new Error("Unauthorized");
+    if (!userId) return null;
 
     const user = await prisma.user.findUnique({
       where: {
@@ -48,7 +49,24 @@ export const getDBUserId = async () => {
 
     return user?.id;
   } catch (error) {
-    throw new Error("Failed to get user id");
+    return null;
+  }
+};
+
+export const getCurrentUser = async () => {
+  try {
+    const { userId } = await auth();
+    if (!userId) return null;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        clerkId: userId,
+      },
+    });
+
+    return user;
+  } catch (error) {
+    return null;
   }
 };
 

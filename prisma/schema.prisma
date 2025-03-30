@@ -14,6 +14,7 @@ model User {
   email     String    @unique
   role      ROLEUSER  @default(USER)
   createdAt DateTime  @default(now())
+  image     String?
   articles  Article[]
   comments  Comment[]
   likes     Like[]
@@ -26,12 +27,12 @@ model Article {
   title           String
   content         String
   views           Int       @default(0)
-  readTime        String
-  categoryArticle String
-  imageUrl        String
   authorId        String
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  readTime        String
+  imageUrl        String
+  categoryArticle String
   author          User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments        Comment[]
   likes           Like[]

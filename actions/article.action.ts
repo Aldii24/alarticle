@@ -34,8 +34,20 @@ export const getArticle = async (id: string) => {
       where: {
         id,
       },
+
       include: {
         author: true,
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+          },
+        },
       },
     });
 
