@@ -18,6 +18,7 @@ const SearchListArticle = ({ articles }: { articles: any }) => {
       <Link
         href={`/article/${articles?.id}`}
         className="flex  gap-6 border p-5 rounded-lg"
+        prefetch={true}
       >
         <div className="flex md:flex-row flex-col gap-8">
           <Image

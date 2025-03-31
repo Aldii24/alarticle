@@ -8,7 +8,7 @@ const SeeAllArticleList = ({ article }: { article: any }) => {
       <Link
         href={`/article/${article?.id}`}
         className="flex flex-col"
-        prefetch={false}
+        prefetch={true}
       >
         <Image
           src={article?.imageUrl}

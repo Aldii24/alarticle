@@ -5,10 +5,11 @@ import { BackgroundBeams } from "./ui/background-beams";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { FormEvent, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTopLoader } from "nextjs-toploader";
 
 const Search = () => {
+  const loader = useTopLoader();
   const { push } = useRouter();
   const [search, setSearch] = useState("");
 
@@ -19,6 +20,7 @@ const Search = () => {
 
     if (e.key === "Enter") {
       push(`/search/${search}`);
+      loader.start();
     }
   };
 
@@ -28,6 +30,7 @@ const Search = () => {
       return;
     } else {
       push(`/search/${search}`);
+      loader.start();
     }
   };
 

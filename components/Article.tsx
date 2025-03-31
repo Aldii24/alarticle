@@ -20,7 +20,7 @@ const Article = () => {
           asChild
           className="border rounded-lg bg-transparent text-white hover:bg-transparent cursor-pointer "
         >
-          <Link href="/articles">
+          <Link href="/articles" prefetch={true}>
             <span>See All</span>
             <ArrowRight className="ml-2" />
           </Link>

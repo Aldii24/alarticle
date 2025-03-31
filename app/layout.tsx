@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
+import NextTopLoader from "nextjs-toploader";
 
 const hostGrotesk = HG({
   variable: "--font-host-grotesk",
@@ -26,9 +27,13 @@ export default function RootLayout({
         <body
           className={`${hostGrotesk.variable} font-host-grotesk antialiased pattern`}
         >
+          <NextTopLoader
+            color="#363D9C"
+            showSpinner={false}
+            easing="ease-out"
+          />
           <Navbar />
           {children}
-
           <Toaster />
         </body>
       </html>

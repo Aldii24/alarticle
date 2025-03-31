@@ -4,7 +4,6 @@ import { getCurrentUser, getDBUserId } from "@/actions/user.action";
 import ArticleDetail from "@/components/ArticleDetail";
 import CommentSection from "@/components/CommentSection";
 import LikeArticle from "@/components/LikeArticle";
-import { currentUser } from "@clerk/nextjs/server";
 
 const ArticlePage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;

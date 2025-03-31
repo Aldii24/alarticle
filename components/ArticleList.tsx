@@ -10,21 +10,38 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
+import { useTopLoader } from "nextjs-toploader";
 
 type OneArticle = Awaited<ReturnType<typeof getOneLatestArticle>>;
 type ThreeArticles = Awaited<ReturnType<typeof getThreeLatestArticles>>;
 
 const ArticleList = () => {
+  const loader = useTopLoader();
+
+  const [isLoading, setIsLoading] = useState(true);
   const [oneArticle, setOneArticle] = useState<OneArticle>();
   const [threeArticle, setThreeArticle] = useState<ThreeArticles>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const one = await getOneLatestArticle();
-      const three = await getThreeLatestArticles();
-      setOneArticle(one);
-      setThreeArticle(three);
+      loader.start();
+      setIsLoading(true);
+
+      try {
+        const [one, three] = await Promise.all([
+          getOneLatestArticle(),
+          getThreeLatestArticles(),
+        ]);
+        setOneArticle(one);
+        setThreeArticle(three);
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+      } finally {
+        setIsLoading(false);
+        loader.done();
+      }
     };
+
     fetchData();
   }, []);
 
@@ -33,7 +50,7 @@ const ArticleList = () => {
       <div className="flex md:flex-row flex-col w-full gap-6">
         <div className="md:w-1/2 w-full">
           {oneArticle ? (
-            <Link href={`/article/${oneArticle?.id}`} prefetch={false}>
+            <Link href={`/article/${oneArticle?.id}`} prefetch={true}>
               <Card className="bg-background">
                 <CardHeader>
                   <Image

@@ -33,33 +33,33 @@ const MobileNavbar = ({ admin }: { admin: boolean }) => {
         </SignedIn>
       </div>
 
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger>
-          <AlignRight className="cursor-pointer" />
-        </SheetTrigger>
-        <SheetContent>
-          <SheetHeader>
-            <SheetTitle>
-              <div className="flex items-center justify-center ">
-                <h2 className="text-3xl font-semibold bg-gradient-to-r from-blue-950 to-indigo-500 bg-clip-text text-transparent">
-                  Alarticle
-                </h2>
-                <Activity />
-              </div>
-            </SheetTitle>
-          </SheetHeader>
-          <div className="flex flex-col gap-4 px-4">
-            {ADMIN && (
+      {ADMIN && (
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger>
+            <AlignRight className="cursor-pointer" />
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>
+                <div className="flex items-center justify-center ">
+                  <h2 className="text-3xl font-semibold bg-gradient-to-r from-blue-950 to-indigo-500 bg-clip-text text-transparent">
+                    Alarticle
+                  </h2>
+                  <Activity />
+                </div>
+              </SheetTitle>
+            </SheetHeader>
+            <div className="flex flex-col gap-4 px-4">
               <Button
                 asChild
                 className="border bg-transparent text-white hover:bg-transparent"
               >
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href="/dashboard" prefetch={true}>Dashboard</Link>
               </Button>
-            )}
-          </div>
-        </SheetContent>
-      </Sheet>
+            </div>
+          </SheetContent>
+        </Sheet>
+      )}
     </div>
   );
 };

@@ -37,6 +37,7 @@ const Navbar = () => {
           <Link
             href="/"
             className="text-3xl font-semibold bg-gradient-to-r from-blue-950 to-indigo-500 bg-clip-text text-transparent"
+            prefetch={true}
           >
             Alarticle
           </Link>
@@ -50,7 +51,7 @@ const Navbar = () => {
               asChild
               className="border bg-transparent text-white hover:bg-transparent"
             >
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/dashboard" prefetch={true}>Dashboard</Link>
             </Button>
           )}
           <SignedOut>
@@ -61,11 +62,8 @@ const Navbar = () => {
               <SignInButton mode="modal">Login</SignInButton>
             </Button>
           </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+          <UserButton />
         </div>
-
         <MobileNavbar admin={isAdmin} />
       </div>
     </nav>
