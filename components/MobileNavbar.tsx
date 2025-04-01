@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { SignedIn, SignedOut, SignUpButton, UserButton } from "@clerk/nextjs";
+import { SignedOut, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Activity, AlignRight } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
@@ -28,9 +28,7 @@ const MobileNavbar = ({ admin }: { admin: boolean }) => {
             <SignUpButton mode="modal">Login</SignUpButton>
           </Button>
         </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+        <UserButton />
       </div>
 
       {ADMIN && (
@@ -54,7 +52,17 @@ const MobileNavbar = ({ admin }: { admin: boolean }) => {
                 asChild
                 className="border bg-transparent text-white hover:bg-transparent"
               >
-                <Link href="/dashboard" prefetch={true}>Dashboard</Link>
+                <Link href="/dashboard" prefetch={true}>
+                  Dashboard
+                </Link>
+              </Button>
+              <Button
+                asChild
+                className="border bg-transparent text-white hover:bg-transparent"
+              >
+                <Link href="/profile" prefetch={true}>
+                  Profile
+                </Link>
               </Button>
             </div>
           </SheetContent>

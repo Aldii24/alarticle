@@ -47,12 +47,24 @@ const Navbar = () => {
         {/* DESKTOP NAVBAR */}
         <div className="items-center gap-4 hidden md:flex">
           {isAdmin && (
-            <Button
-              asChild
-              className="border bg-transparent text-white hover:bg-transparent"
-            >
-              <Link href="/dashboard" prefetch={true}>Dashboard</Link>
-            </Button>
+            <>
+              <Button
+                asChild
+                className="border bg-transparent text-white hover:bg-transparent"
+              >
+                <Link href="/dashboard" prefetch={true}>
+                  Dashboard
+                </Link>
+              </Button>
+              <Button
+                asChild
+                className="border bg-transparent text-white hover:bg-transparent"
+              >
+                <Link href="/profile" prefetch={true}>
+                  Profile
+                </Link>
+              </Button>
+            </>
           )}
           <SignedOut>
             <Button

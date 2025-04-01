@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 
 export const syncUser = async () => {
   try {
@@ -86,5 +87,28 @@ export const getUserRoleAdmin = async () => {
     return adminRole;
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const updateProfile = async (data: any) => {
+  try {
+    const userId = await getDBUserId();
+
+    if (!userId) throw new Error("Unauthorized");
+
+    const user = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        username: data.username,
+        role: data.role,
+      },
+    });
+
+    revalidatePath("/profile");
+    return { success: true, data: user };
+  } catch (error) {
+    return { success: false, error };
   }
 };
