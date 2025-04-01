@@ -7,6 +7,7 @@ import {
   SignedIn,
   SignedOut,
   SignInButton,
+  useAuth,
   UserButton,
   useUser,
 } from "@clerk/nextjs";
@@ -17,6 +18,7 @@ import { getUserRoleAdmin, syncUser } from "@/actions/user.action";
 const Navbar = () => {
   const { user, isLoaded } = useUser();
   const [isAdmin, setIsAdmin] = useState(false);
+  const { userId } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,15 +58,17 @@ const Navbar = () => {
                   Dashboard
                 </Link>
               </Button>
-              <Button
-                asChild
-                className="border bg-transparent text-white hover:bg-transparent"
-              >
-                <Link href="/profile" prefetch={true}>
-                  Profile
-                </Link>
-              </Button>
             </>
+          )}
+          {userId && (
+            <Button
+              asChild
+              className="border bg-transparent text-white hover:bg-transparent"
+            >
+              <Link href="/profile" prefetch={true}>
+                Profile
+              </Link>
+            </Button>
           )}
           <SignedOut>
             <Button
@@ -76,7 +80,7 @@ const Navbar = () => {
           </SignedOut>
           <UserButton />
         </div>
-        <MobileNavbar admin={isAdmin} />
+        <MobileNavbar admin={isAdmin} user={user ? user?.id : ""} />
       </div>
     </nav>
   );

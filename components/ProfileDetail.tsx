@@ -38,12 +38,18 @@ const ProfileDetail = ({
 }) => {
   const [isSubmiting, setIsSubmiting] = useState(false);
   const [role, setRole] = useState(user?.role || "USER");
+  const [username, setUsername] = useState(user?.username || "");
+  const [image, setImage] = useState(user?.image || "");
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsSubmiting(true);
 
     try {
-      const user = await updateProfile(values);
+      const formData = new FormData(e.currentTarget);
+      const values = Object.fromEntries(formData.entries());
+
+      const user = await updateProfile({ ...values, role });
 
       if (user.success) {
         toast.success("Profile updated");
@@ -59,7 +65,7 @@ const ProfileDetail = ({
     <Card className="bg-background">
       <CardHeader>
         <CardTitle className="text-center md:text-3xl text-xl text-gray-500 font-semibold">
-          User Profile
+          {user?.role} PROFILE
         </CardTitle>
         <CardDescription className="text-center text-sm text-muted-foreground my-2">
           Setting for your personal profile
@@ -85,17 +91,7 @@ const ProfileDetail = ({
 
         <Separator className="my-8" />
 
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-
-            const formData = new FormData(e.currentTarget);
-            const values = Object.fromEntries(formData.entries());
-
-            await handleSubmit({ ...values, role });
-          }}
-          method="put"
-        >
+        <form onSubmit={handleSubmit} method="put">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <Label htmlFor="username" className="text-gray-500">
@@ -103,8 +99,10 @@ const ProfileDetail = ({
               </Label>
               <Input
                 name="username"
-                defaultValue={user?.username}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="text-muted-foreground"
+                required
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -112,6 +110,18 @@ const ProfileDetail = ({
                 Email Address
               </Label>
               <Input name="email" defaultValue={user?.email} disabled />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="userImageUrl" className="text-gray-500">
+                Image URL
+              </Label>
+              <Input
+                name="image"
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+                className="text-muted-foreground"
+                required
+              />
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="role" className="text-gray-500">
@@ -122,11 +132,18 @@ const ProfileDetail = ({
                 onValueChange={(value: any) => setRole(value)}
               >
                 <SelectTrigger className="w-full cursor-pointer">
-                  <SelectValue placeholder={user?.role} />
+                  <SelectValue
+                    className="text-muted-foreground"
+                    placeholder={user?.role}
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="ADMIN">ADMIN</SelectItem>
-                  <SelectItem value="USER">USER</SelectItem>
+                  <SelectItem className="text-muted-foreground" value="ADMIN">
+                    ADMIN
+                  </SelectItem>
+                  <SelectItem className="text-muted-foreground" value="USER">
+                    USER
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -134,9 +151,14 @@ const ProfileDetail = ({
 
           <div className="flex justify-end items-end ">
             <Button
-              disabled={isSubmiting}
+              disabled={
+                isSubmiting ||
+                (user?.username.trim() === username.trim() &&
+                  user?.role === role &&
+                  user?.image?.trim() === image.trim())
+              }
               type="submit"
-              className="mt-4 bg-transparent hover:bg-transparent border text-foreground cursor-pointer"
+              className="disabled:cursor-not-allowed disabled:text-muted-foreground mt-4 bg-transparent hover:bg-transparent border text-foreground cursor-pointer"
             >
               {isSubmiting ? (
                 <Loader2Icon className="animate-spin text-foreground" />

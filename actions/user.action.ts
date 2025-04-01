@@ -103,6 +103,7 @@ export const updateProfile = async (data: any) => {
       data: {
         username: data.username,
         role: data.role,
+        image: data.image,
       },
     });
 
