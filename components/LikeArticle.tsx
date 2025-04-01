@@ -54,7 +54,7 @@ const LikeArticle = ({
         )}
         <div className="flex items-center gap-1 text-muted-foreground">
           <p>{optimisticLike}</p>
-          <span>{optimisticLike.length > 1 ? "Likes" : "Like"}</span>
+          <span>{optimisticLike > 1 ? "Likes" : "Like"}</span>
         </div>
       </div>
     </div>
