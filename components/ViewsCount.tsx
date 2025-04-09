@@ -5,8 +5,8 @@ const ViewsCount = ({ article }: { article: any }) => {
         <div className="absolute w-3 h-3 bg-red-400 rounded-full top-0 left-0 animate-ping"></div>
       </div>
       <div className="flex gap-1 items-center">
-        <p>Views: </p>
         <span className="font-semibold">{article?.views}</span>
+        <p>Views</p>
       </div>
     </div>
   );
