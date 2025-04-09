@@ -174,3 +174,22 @@ export const getArticleBySearh = async (search: string) => {
     console.log(error);
   }
 };
+
+export const updateViews = async (id: string) => {
+  if (!id) return null;
+  try {
+    const article = await prisma.article.update({
+      where: {
+        id,
+      },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+    return article;
+  } catch (error) {
+    console.error("Error updating views:", error);
+  }
+};
