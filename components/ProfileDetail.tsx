@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -23,9 +22,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "./ui/button";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { toast } from "sonner";
 import { Loader2Icon } from "lucide-react";
+import { uploadFiles } from "@/utils/uploadthing";
 
 type UserDetail = Awaited<ReturnType<typeof getCurrentUser>>;
 
@@ -40,6 +40,17 @@ const ProfileDetail = ({
   const [role, setRole] = useState(user?.role || "USER");
   const [username, setUsername] = useState(user?.username || "");
   const [image, setImage] = useState(user?.image || "");
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
+
+    if (selected) {
+      setPreview(URL.createObjectURL(selected));
+      setFile(selected);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,7 +60,20 @@ const ProfileDetail = ({
       const formData = new FormData(e.currentTarget);
       const values = Object.fromEntries(formData.entries());
 
-      const user = await updateProfile({ ...values, role });
+      let imageUrl = image;
+
+      if (file) {
+        const res = await uploadFiles("imageUploader", {
+          files: [file],
+        });
+
+        const url = res[0]?.ufsUrl;
+        if (!url) throw new Error("Failed to upload image");
+
+        imageUrl = url;
+      }
+
+      const user = await updateProfile({ ...values, role, image: imageUrl });
 
       if (user.success) {
         toast.success("Profile updated");
@@ -102,7 +126,6 @@ const ProfileDetail = ({
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="text-muted-foreground"
-                required
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -111,17 +134,28 @@ const ProfileDetail = ({
               </Label>
               <Input name="email" defaultValue={user?.email} disabled />
             </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="userImageUrl" className="text-gray-500">
-                Image URL
-              </Label>
-              <Input
-                name="image"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                className="text-muted-foreground"
-                required
-              />
+            <Label htmlFor="userImageUrl" className="text-gray-500">
+              Profile Image
+            </Label>
+            <div className="flex items-center w-full gap-2">
+              {preview ? (
+                <Avatar className="">
+                  <AvatarImage src={preview} alt="img" />
+                </Avatar>
+              ) : (
+                <Avatar className="">
+                  <AvatarImage src={image} alt="img" />
+                </Avatar>
+              )}
+
+              <div className="flex flex-col gap-2 w-full">
+                <Input
+                  type="file"
+                  name="image"
+                  onChange={handleChangeImage}
+                  className="text-muted-foreground w-full"
+                />
+              </div>
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="role" className="text-gray-500">
@@ -151,12 +185,7 @@ const ProfileDetail = ({
 
           <div className="flex justify-end items-end ">
             <Button
-              disabled={
-                isSubmiting ||
-                (user?.username.trim() === username.trim() &&
-                  user?.role === role &&
-                  user?.image?.trim() === image.trim())
-              }
+              disabled={isSubmiting}
               type="submit"
               className="disabled:cursor-not-allowed disabled:text-muted-foreground mt-4 bg-transparent hover:bg-transparent border text-foreground cursor-pointer"
             >
