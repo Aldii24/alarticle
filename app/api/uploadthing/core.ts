@@ -12,7 +12,7 @@ const authClerk = async (req: Request) => {
   return {
     id: userId,
   };
-}; // Fake auth function
+}; 
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {

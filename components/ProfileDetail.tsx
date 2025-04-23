@@ -151,6 +151,7 @@ const ProfileDetail = ({
               <div className="flex flex-col gap-2 w-full">
                 <Input
                   type="file"
+                  accept="image/*"
                   name="image"
                   onChange={handleChangeImage}
                   className="text-muted-foreground w-full"
